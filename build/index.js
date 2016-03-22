@@ -19685,10 +19685,8 @@
 	    _this.boardSize = 3;
 	    _this.tiles = [];
 
-	    _this.state = {
-	      players: [new Player('X'), new Player('O')],
-	      key: Date.now()
-	    };
+	    _this.state = _this.newState();
+	    _this.state.move = 1;
 
 	    for (var x = 0; x < _this.boardSize; x++) {
 	      _this.tiles[x] = [];
@@ -19701,6 +19699,15 @@
 	  }
 
 	  _createClass(BoardComponent, [{
+	    key: 'newState',
+	    value: function newState() {
+	      return {
+	        players: [new Player('X'), new Player('O')],
+	        key: Date.now(),
+	        move: 0
+	      };
+	    }
+	  }, {
 	    key: 'alternatePlayer',
 	    value: function alternatePlayer() {
 	      var players = this.state.players;
@@ -19717,6 +19724,20 @@
 	      return this.state.players[1];
 	    }
 	  }, {
+	    key: 'checkDraw',
+	    value: function checkDraw() {
+	      if (this.state.move == Math.pow(this.boardSize, 2)) {
+	        if (confirm('Draw. Reset game?')) {
+	          this.resetGame();
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'resetGame',
+	    value: function resetGame() {
+	      this.setState(this.newState());
+	    }
+	  }, {
 	    key: 'checkWinner',
 	    value: function checkWinner() {
 	      var _this2 = this;
@@ -19724,10 +19745,7 @@
 	      this.state.players.forEach(function (player) {
 	        if (player.isWinner(_this2.boardSize)) {
 	          if (confirm('Player ' + player.marker + ' won. Reset game?')) {
-	            _this2.setState({
-	              players: [new Player('X'), new Player('O')],
-	              key: Date.now()
-	            });
+	            _this2.resetGame();
 	          }
 	        }
 	      });
@@ -19736,6 +19754,9 @@
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
 	      this.checkWinner();
+	      this.checkDraw();
+
+	      this.state.move = this.state.move + 1;
 	    }
 	  }, {
 	    key: 'render',
