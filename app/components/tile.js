@@ -33,7 +33,7 @@ class TileComponent extends React.Component {
 
     return(
       <div style={ style } onClick={ this.setMarker.bind(this) }>
-        <h1>{ this.state.mark }</h1>
+        <h1>{ this.state.mark }{ this.props.x }, { this.props.y }</h1>
       </div>
     )
   }

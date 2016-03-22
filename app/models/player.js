@@ -17,36 +17,42 @@ class Player {
     if(this.tiles.length < boardSize)
       return
 
-    return this.isVerticallyAlign(boardSize) ||
-           this.isHorizontallyAlign(boardSize) ||
+    return this.isHorizontallyAlign(boardSize) ||
+           this.isVerticallyAlign(boardSize) ||
            this.isDiagonallyAlign(boardSize)
   }
 
-  isVerticallyAlign(boardSize) {
+
+  isHorizontallyAlign(boardSize) {
     return this.isLining(this.xs, boardSize)
   }
 
-  isHorizontallyAlign(boardSize) {
+  isVerticallyAlign(boardSize) {
     return this.isLining(this.ys, boardSize)
   }
 
   isDiagonallyAlign(boardSize) {
-    let x_keys = Object.keys(this.xs).sort()
-    let y_keys = Object.keys(this.ys).sort()
+    let { diagonal, counterDiagonal } = this.generateDiagonalTiles(boardSize)
 
-    if(x_keys.length < boardSize || y_keys.length < boardSize)
-      return
-
-    let center = Math.floor(boardSize / 2)
-
-    return this.isTileExist(center, center) && x_keys.length === y_keys.length && x_keys.every(function(x, index) {
-      return y_keys[index] === x
-    })
+    return diagonal.every((tile) => { return this.isTileExist(tile) }) ||
+           counterDiagonal.every((tile) => { return this.isTileExist(tile) })
   }
 
-  isTileExist(x, y) {
-    return !!this.tiles.find(function(tile) {
-      return tile[0] == x && tile[1] == y
+  generateDiagonalTiles(boardSize) {
+    let diagonal        = []
+    let counterDiagonal = []
+
+    for(var i=0; i < boardSize; i++) {
+      diagonal.push([i, i])
+      counterDiagonal.push([i, boardSize - i - 1])
+    }
+
+    return { diagonal, counterDiagonal }
+  }
+
+  isTileExist([x, y]) {
+    return !!this.tiles.find(function([tile_x, tile_y]) {
+      return tile_x == x && tile_y == y
     })
   }
 

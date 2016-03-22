@@ -5,7 +5,7 @@ jest.unmock(path);
 var Player = require(path);
 
 describe('player basic winning', () => {
-  it('with vertical line on multiboard', () => {
+  it('with horizontal line on multiboard', () => {
     //  x | x | x
     // -----------
     //    |   |
@@ -25,13 +25,17 @@ describe('player basic winning', () => {
           player.addTiles(row, col)
         }
 
+        expect(player.isHorizontallyAlign(boardSize)).toBeTruthy()
+        expect(player.isVerticallyAlign(boardSize)).toBeFalsy()
+        expect(player.isDiagonallyAlign(boardSize)).toBeFalsy()
+
         expect(player.isWinner(boardSize)).toBeTruthy()
       }
     }
   });
 
 
-  it('with horizontal line', () => {
+  it('with vertical line', () => {
     //  x |   |
     // -----------
     //  x |   |
@@ -49,6 +53,10 @@ describe('player basic winning', () => {
         for(var row=0; row < boardSize; row++) {
           player.addTiles(row, col)
         }
+
+        expect(player.isHorizontallyAlign(boardSize)).toBeFalsy()
+        expect(player.isVerticallyAlign(boardSize)).toBeTruthy()
+        expect(player.isDiagonallyAlign(boardSize)).toBeFalsy()
 
         expect(player.isWinner(boardSize)).toBeTruthy()
       }
@@ -73,6 +81,10 @@ describe('player basic winning', () => {
         player.addTiles(row_col, row_col)
       }
 
+      expect(player.isHorizontallyAlign(boardSize)).toBeFalsy()
+      expect(player.isVerticallyAlign(boardSize)).toBeFalsy()
+      expect(player.isDiagonallyAlign(boardSize)).toBeTruthy()
+
       expect(player.isWinner(boardSize)).toBeTruthy()
     }
   });
@@ -89,15 +101,17 @@ describe('player basic winning', () => {
     // player.addTiles(2, 0)
 
     for(var boardSize=3; boardSize < 10; boardSize++) {
-      for(var row=0; row < boardSize; row++) {
-        let player = new Player('X')
+      let player = new Player('X')
 
-        for(var col=boardSize - 1; col >= 0; col--) {
-          player.addTiles(row, col)
-        }
-
-        expect(player.isWinner(boardSize)).toBeTruthy()
+      for(var i=0; i < boardSize; i++) {
+        player.addTiles(i, boardSize - i - 1)
       }
+
+      expect(player.isHorizontallyAlign(boardSize)).toBeFalsy()
+      expect(player.isVerticallyAlign(boardSize)).toBeFalsy()
+      expect(player.isDiagonallyAlign(boardSize)).toBeTruthy()
+
+      expect(player.isWinner(boardSize)).toBeTruthy()
     }
   });
 });

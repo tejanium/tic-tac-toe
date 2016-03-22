@@ -44,10 +44,12 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const React = __webpack_require__(1);
-	const ReactDOM = __webpack_require__(158);
+	'use strict';
 
-	const BoardComponent = __webpack_require__(159);
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+
+	var BoardComponent = __webpack_require__(159);
 
 	ReactDOM.render(React.createElement(BoardComponent, null), document.getElementById('container'));
 
@@ -19656,68 +19658,96 @@
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const React = __webpack_require__(1);
+	'use strict';
 
-	const RowComponent = __webpack_require__(160);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	const Player = __webpack_require__(162);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	class BoardComponent extends React.Component {
-	  constructor() {
-	    super();
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	    this.boardSize = 3;
-	    this.tiles = [];
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	    this.state = {
+	var React = __webpack_require__(1);
+
+	var RowComponent = __webpack_require__(160);
+
+	var Player = __webpack_require__(162);
+
+	var BoardComponent = function (_React$Component) {
+	  _inherits(BoardComponent, _React$Component);
+
+	  function BoardComponent() {
+	    _classCallCheck(this, BoardComponent);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BoardComponent).call(this));
+
+	    _this.boardSize = 3;
+	    _this.tiles = [];
+
+	    _this.state = {
 	      players: [new Player('X'), new Player('O')]
 	    };
 
-	    for (var x = 0; x < this.boardSize; x++) {
-	      this.tiles[x] = [];
+	    for (var x = 0; x < _this.boardSize; x++) {
+	      _this.tiles[x] = [];
 
-	      for (var y = 0; y < this.boardSize; y++) {
-	        this.tiles[x][y] = [x, y];
+	      for (var y = 0; y < _this.boardSize; y++) {
+	        _this.tiles[x][y] = [x, y];
 	      }
 	    }
+	    return _this;
 	  }
 
-	  alternatePlayer() {
-	    let players = this.state.players;
+	  _createClass(BoardComponent, [{
+	    key: 'alternatePlayer',
+	    value: function alternatePlayer() {
+	      var players = this.state.players;
 
-	    players.unshift(players.pop());
+	      players.unshift(players.pop());
 
-	    this.setState({ players: players });
-	  }
+	      this.setState({ players: players });
+	    }
+	  }, {
+	    key: 'currentPlayer',
+	    value: function currentPlayer() {
+	      this.alternatePlayer();
 
-	  currentPlayer() {
-	    this.alternatePlayer();
+	      return this.state.players[1];
+	    }
+	  }, {
+	    key: 'checkWinner',
+	    value: function checkWinner() {
+	      var _this2 = this;
 
-	    return this.state.players[1];
-	  }
+	      this.state.players.forEach(function (player) {
+	        if (player.isWinner(_this2.boardSize)) {
+	          alert('Player ' + player.marker + ' won');
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'componentDidUpdate',
+	    value: function componentDidUpdate() {
+	      this.checkWinner();
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
 
-	  checkWinner() {
-	    this.state.players.forEach(player => {
-	      if (player.isWinner(this.boardSize)) {
-	        alert(`Player ${ player.marker } won`);
-	      }
-	    });
-	  }
+	      return React.createElement(
+	        'div',
+	        { className: 'board' },
+	        this.tiles.map(function (tiles, index) {
+	          return React.createElement(RowComponent, { key: index, x: index, tiles: tiles, currentPlayer: _this3.currentPlayer.bind(_this3) });
+	        })
+	      );
+	    }
+	  }]);
 
-	  componentDidUpdate() {
-	    this.checkWinner();
-	  }
-
-	  render() {
-	    return React.createElement(
-	      'div',
-	      { className: 'board' },
-	      this.tiles.map((tiles, index) => {
-	        return React.createElement(RowComponent, { key: index, x: index, tiles: tiles, currentPlayer: this.currentPlayer.bind(this) });
-	      })
-	    );
-	  }
-	}
+	  return BoardComponent;
+	}(React.Component);
 
 	module.exports = BoardComponent;
 
@@ -19725,21 +19755,46 @@
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const React = __webpack_require__(1);
+	'use strict';
 
-	const TileComponent = __webpack_require__(161);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	class RowComponent extends React.Component {
-	  render() {
-	    return React.createElement(
-	      'div',
-	      null,
-	      this.props.tiles.map((tile, index) => {
-	        return React.createElement(TileComponent, { key: index, x: this.props.x, y: index, tile: tile, currentPlayer: this.props.currentPlayer });
-	      })
-	    );
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+
+	var TileComponent = __webpack_require__(161);
+
+	var RowComponent = function (_React$Component) {
+	  _inherits(RowComponent, _React$Component);
+
+	  function RowComponent() {
+	    _classCallCheck(this, RowComponent);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(RowComponent).apply(this, arguments));
 	  }
-	}
+
+	  _createClass(RowComponent, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return React.createElement(
+	        'div',
+	        null,
+	        this.props.tiles.map(function (tile, index) {
+	          return React.createElement(TileComponent, { key: index, x: _this2.props.x, y: index, tile: tile, currentPlayer: _this2.props.currentPlayer });
+	        })
+	      );
+	    }
+	  }]);
+
+	  return RowComponent;
+	}(React.Component);
 
 	module.exports = RowComponent;
 
@@ -19747,50 +19802,74 @@
 /* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
-	const React = __webpack_require__(1);
+	'use strict';
 
-	class TileComponent extends React.Component {
-	  constructor() {
-	    super();
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	    this.state = {
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(1);
+
+	var TileComponent = function (_React$Component) {
+	  _inherits(TileComponent, _React$Component);
+
+	  function TileComponent() {
+	    _classCallCheck(this, TileComponent);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TileComponent).call(this));
+
+	    _this.state = {
 	      mark: '',
 	      marked: false
 	    };
+	    return _this;
 	  }
 
-	  setMarker() {
-	    if (!this.state.marked) {
-	      let currentPlayer = this.props.currentPlayer();
+	  _createClass(TileComponent, [{
+	    key: 'setMarker',
+	    value: function setMarker() {
+	      if (!this.state.marked) {
+	        var currentPlayer = this.props.currentPlayer();
 
-	      this.setState({ mark: currentPlayer.marker, marked: true });
+	        this.setState({ mark: currentPlayer.marker, marked: true });
 
-	      currentPlayer.addTiles(this.props.x, this.props.y);
+	        currentPlayer.addTiles(this.props.x, this.props.y);
+	      }
 	    }
-	  }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var style = {
+	        width: '100px',
+	        height: '100px',
+	        border: '1px solid',
+	        margin: '1px',
+	        display: 'inline-block',
+	        'verticalAlign': 'top',
+	        'textAlign': 'center'
+	      };
 
-	  render() {
-	    let style = {
-	      width: '100px',
-	      height: '100px',
-	      border: '1px solid',
-	      margin: '1px',
-	      display: 'inline-block',
-	      'verticalAlign': 'top',
-	      'textAlign': 'center'
-	    };
+	      return React.createElement(
+	        'div',
+	        { style: style, onClick: this.setMarker.bind(this) },
+	        React.createElement(
+	          'h1',
+	          null,
+	          this.state.mark,
+	          this.props.x,
+	          ', ',
+	          this.props.y
+	        )
+	      );
+	    }
+	  }]);
 
-	    return React.createElement(
-	      'div',
-	      { style: style, onClick: this.setMarker.bind(this) },
-	      React.createElement(
-	        'h1',
-	        null,
-	        this.state.mark
-	      )
-	    );
-	  }
-	}
+	  return TileComponent;
+	}(React.Component);
 
 	module.exports = TileComponent;
 
@@ -19799,6 +19878,8 @@
 /***/ function(module, exports) {
 
 	"use strict";
+
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -19827,37 +19908,63 @@
 	    value: function isWinner(boardSize) {
 	      if (this.tiles.length < boardSize) return;
 
-	      return this.isVerticallyAlign(boardSize) || this.isHorizontallyAlign(boardSize) || this.isDiagonallyAlign(boardSize);
-	    }
-	  }, {
-	    key: "isVerticallyAlign",
-	    value: function isVerticallyAlign(boardSize) {
-	      return this.isLining(this.xs, boardSize);
+	      return this.isHorizontallyAlign(boardSize) || this.isVerticallyAlign(boardSize) || this.isDiagonallyAlign(boardSize);
 	    }
 	  }, {
 	    key: "isHorizontallyAlign",
 	    value: function isHorizontallyAlign(boardSize) {
+	      return this.isLining(this.xs, boardSize);
+	    }
+	  }, {
+	    key: "isVerticallyAlign",
+	    value: function isVerticallyAlign(boardSize) {
 	      return this.isLining(this.ys, boardSize);
 	    }
 	  }, {
 	    key: "isDiagonallyAlign",
 	    value: function isDiagonallyAlign(boardSize) {
-	      var x_keys = Object.keys(this.xs).sort();
-	      var y_keys = Object.keys(this.ys).sort();
+	      var _this = this;
 
-	      if (x_keys.length < boardSize || y_keys.length < boardSize) return;
+	      var _generateDiagonalTile = this.generateDiagonalTiles(boardSize);
 
-	      var center = Math.floor(boardSize / 2);
+	      var diagonal = _generateDiagonalTile.diagonal;
+	      var counterDiagonal = _generateDiagonalTile.counterDiagonal;
 
-	      return this.isTileExist(center, center) && x_keys.length === y_keys.length && x_keys.every(function (x, index) {
-	        return y_keys[index] === x;
+
+	      return diagonal.every(function (tile) {
+	        return _this.isTileExist(tile);
+	      }) || counterDiagonal.every(function (tile) {
+	        return _this.isTileExist(tile);
 	      });
 	    }
 	  }, {
+	    key: "generateDiagonalTiles",
+	    value: function generateDiagonalTiles(boardSize) {
+	      var diagonal = [];
+	      var counterDiagonal = [];
+
+	      for (var i = 0; i < boardSize; i++) {
+	        diagonal.push([i, i]);
+	        counterDiagonal.push([i, boardSize - i - 1]);
+	      }
+
+	      return { diagonal: diagonal, counterDiagonal: counterDiagonal };
+	    }
+	  }, {
 	    key: "isTileExist",
-	    value: function isTileExist(x, y) {
-	      return !!this.tiles.find(function (tile) {
-	        return tile[0] == x && tile[1] == y;
+	    value: function isTileExist(_ref) {
+	      var _ref2 = _slicedToArray(_ref, 2);
+
+	      var x = _ref2[0];
+	      var y = _ref2[1];
+
+	      return !!this.tiles.find(function (_ref3) {
+	        var _ref4 = _slicedToArray(_ref3, 2);
+
+	        var tile_x = _ref4[0];
+	        var tile_y = _ref4[1];
+
+	        return tile_x == x && tile_y == y;
 	      });
 	    }
 	  }, {
