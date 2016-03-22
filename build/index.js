@@ -19859,10 +19859,7 @@
 	        React.createElement(
 	          'h1',
 	          null,
-	          this.state.mark,
-	          this.props.x,
-	          ', ',
-	          this.props.y
+	          this.state.mark
 	        )
 	      );
 	    }
