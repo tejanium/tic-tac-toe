@@ -19729,6 +19729,8 @@
 	      if (this.state.move == Math.pow(this.boardSize, 2)) {
 	        if (confirm('Draw. Reset game?')) {
 	          this.resetGame();
+
+	          return true;
 	        }
 	      }
 	    }
@@ -19746,6 +19748,8 @@
 	        if (player.isWinner(_this2.boardSize)) {
 	          if (confirm('Player ' + player.marker + ' won. Reset game?')) {
 	            _this2.resetGame();
+
+	            return true;
 	          }
 	        }
 	      });
@@ -19753,8 +19757,7 @@
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      this.checkWinner();
-	      this.checkDraw();
+	      this.checkWinner() && this.checkDraw();
 
 	      this.state.move = this.state.move + 1;
 	    }

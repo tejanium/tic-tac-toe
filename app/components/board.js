@@ -49,6 +49,8 @@ class BoardComponent extends React.Component {
     if(this.state.move == Math.pow(this.boardSize, 2)) {
       if(confirm(`Draw. Reset game?`)) {
         this.resetGame()
+
+        return true
       }
     }
   }
@@ -62,14 +64,15 @@ class BoardComponent extends React.Component {
       if(player.isWinner(this.boardSize)) {
         if(confirm(`Player ${ player.marker } won. Reset game?`)) {
           this.resetGame()
+
+          return true
         }
       }
     })
   }
 
   componentDidUpdate() {
-    this.checkWinner()
-    this.checkDraw()
+    this.checkWinner() && this.checkDraw()
 
     this.state.move = this.state.move + 1
   }
