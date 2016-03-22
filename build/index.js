@@ -19686,7 +19686,8 @@
 	    _this.tiles = [];
 
 	    _this.state = {
-	      players: [new Player('X'), new Player('O')]
+	      players: [new Player('X'), new Player('O')],
+	      key: Date.now()
 	    };
 
 	    for (var x = 0; x < _this.boardSize; x++) {
@@ -19722,7 +19723,12 @@
 
 	      this.state.players.forEach(function (player) {
 	        if (player.isWinner(_this2.boardSize)) {
-	          alert('Player ' + player.marker + ' won');
+	          if (confirm('Player ' + player.marker + ' won. Reset game?')) {
+	            _this2.setState({
+	              players: [new Player('X'), new Player('O')],
+	              key: Date.now()
+	            });
+	          }
 	        }
 	      });
 	    }
@@ -19738,7 +19744,7 @@
 
 	      return React.createElement(
 	        'div',
-	        { className: 'board' },
+	        { className: 'board', key: this.state.key },
 	        this.tiles.map(function (tiles, index) {
 	          return React.createElement(RowComponent, { key: index, x: index, tiles: tiles, currentPlayer: _this3.currentPlayer.bind(_this3) });
 	        })

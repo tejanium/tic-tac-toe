@@ -15,7 +15,8 @@ class BoardComponent extends React.Component {
       players: [
         new Player('X'),
         new Player('O')
-      ]
+      ],
+      key: Date.now()
     }
 
     for(var x = 0; x < this.boardSize; x++) {
@@ -44,7 +45,12 @@ class BoardComponent extends React.Component {
   checkWinner() {
     this.state.players.forEach((player) => {
       if(player.isWinner(this.boardSize)) {
-        alert(`Player ${ player.marker } won`)
+        if(confirm(`Player ${ player.marker } won. Reset game?`)) {
+          this.setState({
+            players: [new Player('X'), new Player('O')],
+            key: Date.now()
+          })
+        }
       }
     })
   }
@@ -55,7 +61,7 @@ class BoardComponent extends React.Component {
 
   render() {
     return(
-      <div className='board'>
+      <div className='board' key={ this.state.key }>
         {
           this.tiles.map((tiles, index) => {
             return <RowComponent key={ index } x={ index } tiles={ tiles } currentPlayer={ this.currentPlayer.bind(this) }/>
