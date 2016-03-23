@@ -19717,11 +19717,16 @@
 	      this.setState({ players: players });
 	    }
 	  }, {
-	    key: 'currentPlayer',
-	    value: function currentPlayer() {
+	    key: 'nextMove',
+	    value: function nextMove() {
 	      this.alternatePlayer();
 
-	      return this.state.players[1];
+	      this.currentPlayer().move();
+	    }
+	  }, {
+	    key: 'currentPlayer',
+	    value: function currentPlayer() {
+	      return this.state.players[0];
 	    }
 	  }, {
 	    key: 'checkDraw',
@@ -19770,7 +19775,11 @@
 	        'div',
 	        { className: 'board', key: this.state.key },
 	        this.tiles.map(function (tiles, index) {
-	          return React.createElement(RowComponent, { key: index, x: index, tiles: tiles, currentPlayer: _this3.currentPlayer.bind(_this3) });
+	          return React.createElement(RowComponent, {
+	            key: index,
+	            x: index,
+	            tiles: tiles,
+	            board: _this3 });
 	        })
 	      );
 	    }
@@ -19817,7 +19826,11 @@
 	        'div',
 	        null,
 	        this.props.tiles.map(function (tile, index) {
-	          var tileComponent = React.createElement(TileComponent, { key: index, x: _this2.props.x, y: index, tile: tile, currentPlayer: _this2.props.currentPlayer });
+	          var tileComponent = React.createElement(TileComponent, { key: index,
+	            x: _this2.props.x,
+	            y: index,
+	            tile: tile,
+	            board: _this2.props.board });
 
 	          tile[2] = tileComponent;
 
@@ -19868,6 +19881,8 @@
 	    value: function setMark(marker) {
 	      if (!this.state.marked) {
 	        this.setState({ mark: marker, marked: true });
+
+	        this.props.board.nextMove();
 	      }
 	    }
 	  }, {
@@ -19888,7 +19903,7 @@
 	      return React.createElement(
 	        'div',
 	        { style: style, onClick: function onClick() {
-	            return _this2.props.currentPlayer().markTile(_this2);
+	            return _this2.props.board.currentPlayer().markTile(_this2);
 	          } },
 	        React.createElement(
 	          'h1',
@@ -19933,6 +19948,11 @@
 
 	      this.xs[x] = (this.xs[x] || 0) + 1;
 	      this.ys[y] = (this.ys[y] || 0) + 1;
+	    }
+	  }, {
+	    key: "move",
+	    value: function move() {
+	      // did nothing
 	    }
 	  }, {
 	    key: "markTile",

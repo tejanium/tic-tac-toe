@@ -39,10 +39,14 @@ class BoardComponent extends React.Component {
     this.setState({ players: players })
   }
 
-  currentPlayer() {
-    this.alternatePlayer();
+  nextMove() {
+    this.alternatePlayer()
 
-    return this.state.players[1];
+    this.currentPlayer().move();
+  }
+
+  currentPlayer() {
+    return this.state.players[0];
   }
 
   checkDraw() {
@@ -82,7 +86,11 @@ class BoardComponent extends React.Component {
       <div className='board' key={ this.state.key }>
         {
           this.tiles.map((tiles, index) => {
-            return <RowComponent key={ index } x={ index } tiles={ tiles } currentPlayer={ this.currentPlayer.bind(this) }/>
+            return <RowComponent
+              key={ index }
+              x={ index }
+              tiles={ tiles }
+              board={ this } />
           })
         }
       </div>

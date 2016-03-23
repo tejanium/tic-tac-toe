@@ -13,6 +13,10 @@ class Player {
     this.ys[y] = (this.ys[y] || 0) + 1
   }
 
+  move() {
+    // did nothing
+  }
+
   markTile(tile) {
     tile.setMark(this.marker)
 
