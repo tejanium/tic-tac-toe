@@ -19692,7 +19692,7 @@
 	      _this.tiles[x] = [];
 
 	      for (var y = 0; y < _this.boardSize; y++) {
-	        _this.tiles[x][y] = [x, y];
+	        _this.tiles[x][y] = [x, y, undefined];
 	      }
 	    }
 	    return _this;
@@ -19817,7 +19817,11 @@
 	        'div',
 	        null,
 	        this.props.tiles.map(function (tile, index) {
-	          return React.createElement(TileComponent, { key: index, x: _this2.props.x, y: index, tile: tile, currentPlayer: _this2.props.currentPlayer });
+	          var tileComponent = React.createElement(TileComponent, { key: index, x: _this2.props.x, y: index, tile: tile, currentPlayer: _this2.props.currentPlayer });
+
+	          tile[2] = tileComponent;
+
+	          return tileComponent;
 	        })
 	      );
 	    }

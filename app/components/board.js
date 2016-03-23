@@ -18,7 +18,7 @@ class BoardComponent extends React.Component {
       this.tiles[x] = []
 
       for(var y = 0; y < this.boardSize; y++) {
-        this.tiles[x][y] = [x, y]
+        this.tiles[x][y] = [x, y, undefined]
       }
     }
   }
