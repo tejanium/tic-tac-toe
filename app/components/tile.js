@@ -10,13 +10,11 @@ class TileComponent extends React.Component {
     }
   }
 
-  setMarker() {
+  setMark(player) {
     if(!this.state.marked) {
-      let currentPlayer = this.props.currentPlayer()
+      this.setState({ mark: player.marker, marked: true })
 
-      this.setState({ mark: currentPlayer.marker, marked: true })
-
-      currentPlayer.addTiles(this.props.x, this.props.y)
+      player.addTiles(this.props.x, this.props.y)
     }
   }
 
@@ -32,7 +30,7 @@ class TileComponent extends React.Component {
     }
 
     return(
-      <div style={ style } onClick={ this.setMarker.bind(this) }>
+      <div style={ style } onClick={ () => this.setMark(this.props.currentPlayer()) }>
         <h1>{ this.state.mark }</h1>
       </div>
     )

@@ -19860,19 +19860,19 @@
 	  }
 
 	  _createClass(TileComponent, [{
-	    key: 'setMarker',
-	    value: function setMarker() {
+	    key: 'setMark',
+	    value: function setMark(player) {
 	      if (!this.state.marked) {
-	        var currentPlayer = this.props.currentPlayer();
+	        this.setState({ mark: player.marker, marked: true });
 
-	        this.setState({ mark: currentPlayer.marker, marked: true });
-
-	        currentPlayer.addTiles(this.props.x, this.props.y);
+	        player.addTiles(this.props.x, this.props.y);
 	      }
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      var style = {
 	        width: '100px',
 	        height: '100px',
@@ -19885,7 +19885,9 @@
 
 	      return React.createElement(
 	        'div',
-	        { style: style, onClick: this.setMarker.bind(this) },
+	        { style: style, onClick: function onClick() {
+	            return _this2.setMark(_this2.props.currentPlayer());
+	          } },
 	        React.createElement(
 	          'h1',
 	          null,
