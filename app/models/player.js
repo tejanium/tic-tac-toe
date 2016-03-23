@@ -13,6 +13,12 @@ class Player {
     this.ys[y] = (this.ys[y] || 0) + 1
   }
 
+  markTile(tile) {
+    tile.setMark(this.marker)
+
+    this.addTiles(tile.props.x, tile.props.y)
+  }
+
   isWinner(boardSize) {
     if(this.tiles.length < boardSize)
       return
@@ -21,7 +27,6 @@ class Player {
            this.isVerticallyAlign(boardSize) ||
            this.isDiagonallyAlign(boardSize)
   }
-
 
   isHorizontallyAlign(boardSize) {
     return this.isLining(this.xs, boardSize)

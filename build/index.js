@@ -19861,11 +19861,9 @@
 
 	  _createClass(TileComponent, [{
 	    key: 'setMark',
-	    value: function setMark(player) {
+	    value: function setMark(marker) {
 	      if (!this.state.marked) {
-	        this.setState({ mark: player.marker, marked: true });
-
-	        player.addTiles(this.props.x, this.props.y);
+	        this.setState({ mark: marker, marked: true });
 	      }
 	    }
 	  }, {
@@ -19886,7 +19884,7 @@
 	      return React.createElement(
 	        'div',
 	        { style: style, onClick: function onClick() {
-	            return _this2.setMark(_this2.props.currentPlayer());
+	            return _this2.props.currentPlayer().markTile(_this2);
 	          } },
 	        React.createElement(
 	          'h1',
@@ -19931,6 +19929,13 @@
 
 	      this.xs[x] = (this.xs[x] || 0) + 1;
 	      this.ys[y] = (this.ys[y] || 0) + 1;
+	    }
+	  }, {
+	    key: "markTile",
+	    value: function markTile(tile) {
+	      tile.setMark(this.marker);
+
+	      this.addTiles(tile.props.x, tile.props.y);
 	    }
 	  }, {
 	    key: "isWinner",
