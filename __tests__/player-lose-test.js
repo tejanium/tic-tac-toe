@@ -14,11 +14,11 @@ describe('player lose', () => {
 
     let player = new Player('X')
 
-    player.addTiles(0, 0)
-    player.addTiles(0, 2)
-    player.addTiles(1, 0)
-    player.addTiles(1, 1)
-    player.addTiles(2, 1)
+    player.addTile(0, 0)
+    player.addTile(0, 2)
+    player.addTile(1, 0)
+    player.addTile(1, 1)
+    player.addTile(2, 1)
 
     expect(player.isVerticallyAlign(3)).toBeFalsy()
     expect(player.isHorizontallyAlign(3)).toBeFalsy()

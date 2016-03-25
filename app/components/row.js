@@ -8,15 +8,11 @@ class RowComponent extends React.Component {
       <div>
         {
           this.props.tiles.map((tile, index) => {
-            let tileComponent = <TileComponent key={ index }
-                                               x={ this.props.x }
-                                               y={ index }
-                                               tile={ tile }
-                                               board={ this.props.board } />
-
-            tile[2] = tileComponent
-
-            return tileComponent
+            return <TileComponent key={ index }
+                                  x={ this.props.x }
+                                  y={ index }
+                                  tile={ tile }
+                                  board={ this.props.board } />
           })
         }
       </div>

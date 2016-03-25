@@ -19673,6 +19673,7 @@
 	var RowComponent = __webpack_require__(160);
 
 	var Player = __webpack_require__(162);
+	var AI = __webpack_require__(163);
 
 	var BoardComponent = function (_React$Component) {
 	  _inherits(BoardComponent, _React$Component);
@@ -19702,26 +19703,25 @@
 	    key: 'newState',
 	    value: function newState() {
 	      return {
-	        players: [new Player('X'), new Player('O')],
+	        players: [new Player('X'), new AI('O')],
 	        key: Date.now(),
 	        move: 0
 	      };
 	    }
 	  }, {
-	    key: 'alternatePlayer',
-	    value: function alternatePlayer() {
+	    key: 'nextMove',
+	    value: function nextMove() {
+	      var _this2 = this;
+
+	      if (this.ended) return;
+
 	      var players = this.state.players;
 
 	      players.unshift(players.pop());
 
-	      this.setState({ players: players });
-	    }
-	  }, {
-	    key: 'nextMove',
-	    value: function nextMove() {
-	      this.alternatePlayer();
-
-	      this.currentPlayer().move();
+	      this.setState({ players: players }, function () {
+	        _this2.currentPlayer().move(_this2);
+	      });
 	    }
 	  }, {
 	    key: 'currentPlayer',
@@ -19731,12 +19731,12 @@
 	  }, {
 	    key: 'checkDraw',
 	    value: function checkDraw() {
-	      if (this.state.move == Math.pow(this.boardSize, 2)) {
-	        if (confirm('Draw. Reset game?')) {
-	          this.resetGame();
+	      if (!this.allTilesAreFilled()) return false;
 
-	          return true;
-	        }
+	      if (confirm('Draw. Reset game?')) {
+	        this.resetGame();
+	      } else {
+	        this.ended = true;
 	      }
 	    }
 	  }, {
@@ -19745,16 +19745,26 @@
 	      this.setState(this.newState());
 	    }
 	  }, {
+	    key: 'getTile',
+	    value: function getTile(x, y) {
+	      return this.tiles[x][y][2];
+	    }
+	  }, {
+	    key: 'allTilesAreFilled',
+	    value: function allTilesAreFilled() {
+	      return this.state.move == Math.pow(this.boardSize, 2);
+	    }
+	  }, {
 	    key: 'checkWinner',
 	    value: function checkWinner() {
-	      var _this2 = this;
+	      var _this3 = this;
 
 	      this.state.players.forEach(function (player) {
-	        if (player.isWinner(_this2.boardSize)) {
+	        if (player.isWinner(_this3.boardSize)) {
 	          if (confirm('Player ' + player.marker + ' won. Reset game?')) {
-	            _this2.resetGame();
-
-	            return true;
+	            _this3.resetGame();
+	          } else {
+	            _this3.ended = true;
 	          }
 	        }
 	      });
@@ -19762,14 +19772,15 @@
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate() {
-	      this.checkWinner() && this.checkDraw();
+	      this.checkWinner();
+	      this.checkDraw();
 
 	      this.state.move = this.state.move + 1;
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this3 = this;
+	      var _this4 = this;
 
 	      return React.createElement(
 	        'div',
@@ -19779,7 +19790,7 @@
 	            key: index,
 	            x: index,
 	            tiles: tiles,
-	            board: _this3 });
+	            board: _this4 });
 	        })
 	      );
 	    }
@@ -19826,15 +19837,11 @@
 	        'div',
 	        null,
 	        this.props.tiles.map(function (tile, index) {
-	          var tileComponent = React.createElement(TileComponent, { key: index,
+	          return React.createElement(TileComponent, { key: index,
 	            x: _this2.props.x,
 	            y: index,
 	            tile: tile,
 	            board: _this2.props.board });
-
-	          tile[2] = tileComponent;
-
-	          return tileComponent;
 	        })
 	      );
 	    }
@@ -19883,7 +19890,14 @@
 	        this.setState({ mark: marker, marked: true });
 
 	        this.props.board.nextMove();
+
+	        return true;
 	      }
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.tile[2] = this;
 	    }
 	  }, {
 	    key: 'render',
@@ -19902,7 +19916,8 @@
 
 	      return React.createElement(
 	        'div',
-	        { style: style, onClick: function onClick() {
+	        { style: style,
+	          onClick: function onClick() {
 	            return _this2.props.board.currentPlayer().markTile(_this2);
 	          } },
 	        React.createElement(
@@ -19942,8 +19957,8 @@
 	  }
 
 	  _createClass(Player, [{
-	    key: "addTiles",
-	    value: function addTiles(x, y) {
+	    key: "addTile",
+	    value: function addTile(x, y) {
 	      this.tiles.push([x, y]);
 
 	      this.xs[x] = (this.xs[x] || 0) + 1;
@@ -19957,9 +19972,9 @@
 	  }, {
 	    key: "markTile",
 	    value: function markTile(tile) {
-	      tile.setMark(this.marker);
-
-	      this.addTiles(tile.props.x, tile.props.y);
+	      if (tile.setMark(this.marker)) {
+	        this.addTile(tile.props.x, tile.props.y);
+	      }
 	    }
 	  }, {
 	    key: "isWinner",
@@ -19983,6 +19998,8 @@
 	    value: function isDiagonallyAlign(boardSize) {
 	      var _this = this;
 
+	      if (boardSize % 2 == 0) return false;
+
 	      var _generateDiagonalTile = this.generateDiagonalTiles(boardSize);
 
 	      var diagonal = _generateDiagonalTile.diagonal;
@@ -19994,6 +20011,17 @@
 	      }) || counterDiagonal.every(function (tile) {
 	        return _this.isTileExist(tile);
 	      });
+	    }
+	  }, {
+	    key: "clone",
+	    value: function clone() {
+	      var clone = new Player(this.marker);
+
+	      clone.tiles = this.tiles.slice();
+	      clone.xs = Object.assign({}, this.xs);
+	      clone.ys = Object.assign({}, this.ys);
+
+	      return clone;
 	    }
 	  }, {
 	    key: "generateDiagonalTiles",
@@ -20040,6 +20068,160 @@
 	}();
 
 	module.exports = Player;
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Player = __webpack_require__(162);
+
+	var AI = function (_Player) {
+	  _inherits(AI, _Player);
+
+	  function AI() {
+	    _classCallCheck(this, AI);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AI).apply(this, arguments));
+	  }
+
+	  _createClass(AI, [{
+	    key: 'move',
+	    value: function move(board) {
+	      var tile = this.determineBestMove(board);
+
+	      if (tile) {
+	        this.markTile(tile[2]);
+	      }
+	    }
+	  }, {
+	    key: 'determineBestMove',
+	    value: function determineBestMove(board) {
+	      var _this2 = this;
+
+	      var emptyTiles = this.getEmptyTiles(board, board.state.players);
+
+	      // instant win
+	      var instatWin = emptyTiles.find(function (tile) {
+	        return _this2.simulateWinning(tile[0], tile[1], board, _this2);
+	      });
+
+	      if (instatWin) return instatWin;
+
+	      // block others
+	      var blockWin = emptyTiles.find(function (tile) {
+	        return _this2.someoneWin(tile[0], tile[1], board);
+	      });
+
+	      if (blockWin) return blockWin;
+
+	      // if center available, take center
+	      var boardCenter = Math.floor(board.boardSize / 2);
+	      var centerTile = emptyTiles.find(function (tile) {
+	        return tile[0] == boardCenter && tile[1] == boardCenter;
+	      });
+
+	      if (centerTile) {
+	        return centerTile;
+	      }
+
+	      // if corner available, take corner
+	      var boardMax = board.boardSize - 1;
+	      var corners = emptyTiles.filter(function (tile) {
+	        return tile[0] == 0 && tile[1] == 0 || tile[0] == 0 && tile[1] == boardMax || tile[0] == boardMax && tile[1] == 0 || tile[0] == boardMax && tile[1] == boardMax;
+	      });
+
+	      if (corners.length) {
+	        return this.getRandom(corners);
+	      }
+
+	      // incremental move
+	      var maxX = this.maxValue(this.xs);
+	      var maxY = this.maxValue(this.ys);
+
+	      var incerementalMove = emptyTiles.find(function (tile) {
+	        if (maxX > maxY) {
+	          return tile[0] == maxX;
+	        } else {
+	          return tile[1] == maxY;
+	        }
+	      });
+
+	      if (incerementalMove) return incerementalMove;
+
+	      // In the end it doesn't even matter
+	      return this.getRandom(emptyTiles);
+	    }
+	  }, {
+	    key: 'getRandom',
+	    value: function getRandom(array) {
+	      return array[Math.floor(Math.random() * array.length)];
+	    }
+	  }, {
+	    key: 'maxValue',
+	    value: function maxValue(object) {
+	      var max = 0;
+
+	      for (var key in object) {
+	        if (object[key] > max) {
+	          max = key;
+	        }
+	      }
+
+	      return max;
+	    }
+	  }, {
+	    key: 'someoneWin',
+	    value: function someoneWin(x, y, board) {
+	      var _this3 = this;
+
+	      return board.state.players.some(function (player) {
+	        return _this3.simulateWinning(x, y, board, player);
+	      });
+	    }
+	  }, {
+	    key: 'simulateWinning',
+	    value: function simulateWinning(x, y, board, player) {
+	      var clone = player.clone();
+
+	      clone.addTile(x, y);
+
+	      return clone.isWinner(board.boardSize);
+	    }
+	  }, {
+	    key: 'getEmptyTiles',
+	    value: function getEmptyTiles(board, players) {
+	      var playerTiles = players.reduce(function (acc, player) {
+	        acc.concat(player.tiles);
+
+	        return acc;
+	      }, []);
+
+	      return board.tiles.reduce(function (acc, row) {
+	        return row.filter(function (tile) {
+	          playerTiles.find(function (playerTile) {
+	            return playerTile[0] == tile[0] && playerTile[1] == tile[1];
+	          });
+
+	          return !tile[2].state.marked;
+	        }).concat(acc);
+	      }, []);
+	    }
+	  }]);
+
+	  return AI;
+	}(Player);
+
+	module.exports = AI;
 
 /***/ }
 /******/ ]);

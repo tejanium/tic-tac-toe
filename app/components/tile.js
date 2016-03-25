@@ -15,7 +15,13 @@ class TileComponent extends React.Component {
       this.setState({ mark: marker, marked: true })
 
       this.props.board.nextMove()
+
+      return true
     }
+  }
+
+  componentDidMount() {
+    this.props.tile[2] = this
   }
 
   render() {
@@ -30,7 +36,8 @@ class TileComponent extends React.Component {
     }
 
     return(
-      <div style={ style } onClick={ () => this.props.board.currentPlayer().markTile(this) }>
+      <div style={ style }
+           onClick={ () => this.props.board.currentPlayer().markTile(this) }>
         <h1>{ this.state.mark }</h1>
       </div>
     )

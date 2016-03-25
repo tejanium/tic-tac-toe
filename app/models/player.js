@@ -6,7 +6,7 @@ class Player {
     this.ys     = {}
   }
 
-  addTiles(x, y) {
+  addTile(x, y) {
     this.tiles.push([x, y])
 
     this.xs[x] = (this.xs[x] || 0) + 1
@@ -18,9 +18,9 @@ class Player {
   }
 
   markTile(tile) {
-    tile.setMark(this.marker)
-
-    this.addTiles(tile.props.x, tile.props.y)
+    if(tile.setMark(this.marker)) {
+      this.addTile(tile.props.x, tile.props.y)
+    }
   }
 
   isWinner(boardSize) {
@@ -41,10 +41,23 @@ class Player {
   }
 
   isDiagonallyAlign(boardSize) {
+    if(boardSize % 2 == 0)
+      return false
+
     let { diagonal, counterDiagonal } = this.generateDiagonalTiles(boardSize)
 
     return diagonal.every((tile) => { return this.isTileExist(tile) }) ||
            counterDiagonal.every((tile) => { return this.isTileExist(tile) })
+  }
+
+  clone() {
+    let clone = new Player(this.marker)
+
+    clone.tiles = this.tiles.slice()
+    clone.xs    = Object.assign({}, this.xs)
+    clone.ys    = Object.assign({}, this.ys)
+
+    return clone
   }
 
   generateDiagonalTiles(boardSize) {

@@ -14,11 +14,11 @@ describe('player edge winning', () => {
 
     let player = new Player('X')
 
-    player.addTiles(0, 0)
-    player.addTiles(0, 1)
-    player.addTiles(0, 2)
-    player.addTiles(1, 0)
-    player.addTiles(1, 1)
+    player.addTile(0, 0)
+    player.addTile(0, 1)
+    player.addTile(0, 2)
+    player.addTile(1, 0)
+    player.addTile(1, 1)
 
     expect(player.isHorizontallyAlign(3)).toBeTruthy()
     expect(player.isVerticallyAlign(3)).toBeFalsy()
@@ -35,17 +35,17 @@ describe('player edge winning', () => {
     // -----------
     //  x |   |
 
-    // player.addTiles(0, 0)
-    // player.addTiles(1, 0)
-    // player.addTiles(2, 0)
+    // player.addTile(0, 0)
+    // player.addTile(1, 0)
+    // player.addTile(2, 0)
 
     let player = new Player('X')
 
-    player.addTiles(0, 0)
-    player.addTiles(1, 0)
-    player.addTiles(2, 0)
-    player.addTiles(0, 1)
-    player.addTiles(1, 1)
+    player.addTile(0, 0)
+    player.addTile(1, 0)
+    player.addTile(2, 0)
+    player.addTile(0, 1)
+    player.addTile(1, 1)
 
     expect(player.isHorizontallyAlign(3)).toBeFalsy()
     expect(player.isVerticallyAlign(3)).toBeTruthy()
@@ -63,10 +63,10 @@ describe('player edge winning', () => {
 
     let player = new Player('X')
 
-    player.addTiles(0, 0)
-    player.addTiles(1, 1)
-    player.addTiles(2, 2)
-    player.addTiles(0, 2)
+    player.addTile(0, 0)
+    player.addTile(1, 1)
+    player.addTile(2, 2)
+    player.addTile(0, 2)
 
     expect(player.isHorizontallyAlign(3)).toBeFalsy()
     expect(player.isVerticallyAlign(3)).toBeFalsy()
@@ -84,10 +84,10 @@ describe('player edge winning', () => {
 
     let player = new Player('X')
 
-    player.addTiles(0, 2)
-    player.addTiles(1, 1)
-    player.addTiles(2, 0)
-    player.addTiles(1, 2)
+    player.addTile(0, 2)
+    player.addTile(1, 1)
+    player.addTile(2, 0)
+    player.addTile(1, 2)
 
     expect(player.isHorizontallyAlign(3)).toBeFalsy()
     expect(player.isVerticallyAlign(3)).toBeFalsy()

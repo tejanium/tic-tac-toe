@@ -12,9 +12,9 @@ describe('player basic winning', () => {
     // -----------
     //    |   |
 
-    // player.addTiles(0, 0)
-    // player.addTiles(0, 1)
-    // player.addTiles(0, 2)
+    // player.addTile(0, 0)
+    // player.addTile(0, 1)
+    // player.addTile(0, 2)
 
 
     for(var boardSize=3; boardSize < 10; boardSize++) {
@@ -22,7 +22,7 @@ describe('player basic winning', () => {
         let player = new Player('X')
 
         for(var col=0; col < boardSize; col++) {
-          player.addTiles(row, col)
+          player.addTile(row, col)
         }
 
         expect(player.isHorizontallyAlign(boardSize)).toBeTruthy()
@@ -42,16 +42,16 @@ describe('player basic winning', () => {
     // -----------
     //  x |   |
 
-    // player.addTiles(0, 0)
-    // player.addTiles(1, 0)
-    // player.addTiles(2, 0)
+    // player.addTile(0, 0)
+    // player.addTile(1, 0)
+    // player.addTile(2, 0)
 
     for(var boardSize=3; boardSize < 10; boardSize++) {
       for(var col=0; col < boardSize; col++) {
         let player = new Player('X')
 
         for(var row=0; row < boardSize; row++) {
-          player.addTiles(row, col)
+          player.addTile(row, col)
         }
 
         expect(player.isHorizontallyAlign(boardSize)).toBeFalsy()
@@ -70,15 +70,15 @@ describe('player basic winning', () => {
     // -----------
     //    |   | x
 
-    // player.addTiles(0, 0)
-    // player.addTiles(1, 1)
-    // player.addTiles(2, 2)
+    // player.addTile(0, 0)
+    // player.addTile(1, 1)
+    // player.addTile(2, 2)
 
     for(var boardSize=3; boardSize < 10; boardSize++) {
       let player = new Player('X')
 
       for(var row_col=0; row_col < boardSize; row_col++) {
-        player.addTiles(row_col, row_col)
+        player.addTile(row_col, row_col)
       }
 
       expect(player.isHorizontallyAlign(boardSize)).toBeFalsy()
@@ -96,15 +96,15 @@ describe('player basic winning', () => {
     // -----------
     //  x |   |
 
-    // player.addTiles(0, 2)
-    // player.addTiles(1, 1)
-    // player.addTiles(2, 0)
+    // player.addTile(0, 2)
+    // player.addTile(1, 1)
+    // player.addTile(2, 0)
 
     for(var boardSize=3; boardSize < 10; boardSize++) {
       let player = new Player('X')
 
       for(var i=0; i < boardSize; i++) {
-        player.addTiles(i, boardSize - i - 1)
+        player.addTile(i, boardSize - i - 1)
       }
 
       expect(player.isHorizontallyAlign(boardSize)).toBeFalsy()
