@@ -49,9 +49,13 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 
-	var BoardComponent = __webpack_require__(159);
+	var BoardComponent = __webpack_require__(160);
 
-	ReactDOM.render(React.createElement(BoardComponent, null), document.getElementById('container'));
+	var DefaultBoardSize = 3;
+
+	var boardSize = parseInt(window.location.search.replace('?', '')) || DefaultBoardSize;
+
+	ReactDOM.render(React.createElement(BoardComponent, { boardSize: boardSize }), document.getElementById('container'));
 
 /***/ },
 /* 1 */
@@ -19655,7 +19659,8 @@
 
 
 /***/ },
-/* 159 */
+/* 159 */,
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19670,29 +19675,28 @@
 
 	var React = __webpack_require__(1);
 
-	var RowComponent = __webpack_require__(160);
+	var RowComponent = __webpack_require__(161);
 
-	var Player = __webpack_require__(162);
-	var AI = __webpack_require__(163);
+	var Player = __webpack_require__(163);
+	var AI = __webpack_require__(164);
 
 	var BoardComponent = function (_React$Component) {
 	  _inherits(BoardComponent, _React$Component);
 
-	  function BoardComponent() {
+	  function BoardComponent(props) {
 	    _classCallCheck(this, BoardComponent);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BoardComponent).call(this));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(BoardComponent).call(this, props));
 
-	    _this.boardSize = 3;
 	    _this.tiles = [];
 
 	    _this.state = _this.newState();
 	    _this.state.move = 1;
 
-	    for (var x = 0; x < _this.boardSize; x++) {
+	    for (var x = 0; x < _this.props.boardSize; x++) {
 	      _this.tiles[x] = [];
 
-	      for (var y = 0; y < _this.boardSize; y++) {
+	      for (var y = 0; y < _this.props.boardSize; y++) {
 	        _this.tiles[x][y] = [x, y, undefined];
 	      }
 	    }
@@ -19752,7 +19756,7 @@
 	  }, {
 	    key: 'allTilesAreFilled',
 	    value: function allTilesAreFilled() {
-	      return this.state.move == Math.pow(this.boardSize, 2);
+	      return this.state.move == Math.pow(this.props.boardSize, 2);
 	    }
 	  }, {
 	    key: 'checkWinner',
@@ -19760,7 +19764,7 @@
 	      var _this3 = this;
 
 	      this.state.players.forEach(function (player) {
-	        if (player.isWinner(_this3.boardSize)) {
+	        if (player.isWinner(_this3.props.boardSize)) {
 	          if (confirm('Player ' + player.marker + ' won. Reset game?')) {
 	            _this3.resetGame();
 	          } else {
@@ -19802,7 +19806,7 @@
 	module.exports = BoardComponent;
 
 /***/ },
-/* 160 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19817,7 +19821,7 @@
 
 	var React = __webpack_require__(1);
 
-	var TileComponent = __webpack_require__(161);
+	var TileComponent = __webpack_require__(162);
 
 	var RowComponent = function (_React$Component) {
 	  _inherits(RowComponent, _React$Component);
@@ -19853,7 +19857,7 @@
 	module.exports = RowComponent;
 
 /***/ },
-/* 161 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19935,7 +19939,7 @@
 	module.exports = TileComponent;
 
 /***/ },
-/* 162 */
+/* 163 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -20070,7 +20074,7 @@
 	module.exports = Player;
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20083,7 +20087,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Player = __webpack_require__(162);
+	var Player = __webpack_require__(163);
 
 	var AI = function (_Player) {
 	  _inherits(AI, _Player);
@@ -20125,7 +20129,7 @@
 	      if (blockWin) return blockWin;
 
 	      // if center available, take center
-	      var boardCenter = Math.floor(board.boardSize / 2);
+	      var boardCenter = Math.floor(board.props.boardSize / 2);
 	      var centerTile = emptyTiles.find(function (tile) {
 	        return tile[0] == boardCenter && tile[1] == boardCenter;
 	      });
@@ -20135,7 +20139,7 @@
 	      }
 
 	      // if corner available, take corner
-	      var boardMax = board.boardSize - 1;
+	      var boardMax = board.props.boardSize - 1;
 	      var corners = emptyTiles.filter(function (tile) {
 	        return tile[0] == 0 && tile[1] == 0 || tile[0] == 0 && tile[1] == boardMax || tile[0] == boardMax && tile[1] == 0 || tile[0] == boardMax && tile[1] == boardMax;
 	      });
@@ -20195,7 +20199,7 @@
 
 	      clone.addTile(x, y);
 
-	      return clone.isWinner(board.boardSize);
+	      return clone.isWinner(board.props.boardSize);
 	    }
 	  }, {
 	    key: 'getEmptyTiles',

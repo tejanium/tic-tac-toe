@@ -6,19 +6,18 @@ const Player = require('../models/player')
 const AI     = require('../models/ai')
 
 class BoardComponent extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
-    this.boardSize = 3
-    this.tiles     = []
+    this.tiles = []
 
     this.state = this.newState()
     this.state.move = 1
 
-    for(var x = 0; x < this.boardSize; x++) {
+    for(var x = 0; x < this.props.boardSize; x++) {
       this.tiles[x] = []
 
-      for(var y = 0; y < this.boardSize; y++) {
+      for(var y = 0; y < this.props.boardSize; y++) {
         this.tiles[x][y] = [x, y, undefined]
       }
     }
@@ -69,12 +68,12 @@ class BoardComponent extends React.Component {
   }
 
   allTilesAreFilled() {
-    return this.state.move == Math.pow(this.boardSize, 2)
+    return this.state.move == Math.pow(this.props.boardSize, 2)
   }
 
   checkWinner() {
     this.state.players.forEach((player) => {
-      if(player.isWinner(this.boardSize)) {
+      if(player.isWinner(this.props.boardSize)) {
         if(confirm(`Player ${ player.marker } won. Reset game?`)) {
           this.resetGame()
         }else{

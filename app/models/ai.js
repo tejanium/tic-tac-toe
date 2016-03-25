@@ -29,7 +29,7 @@ class AI extends Player {
       return blockWin
 
     // if center available, take center
-    let boardCenter = Math.floor(board.boardSize / 2)
+    let boardCenter = Math.floor(board.props.boardSize / 2)
     let centerTile = emptyTiles.find(function(tile) {
       return tile[0] == boardCenter && tile[1] == boardCenter
     })
@@ -39,7 +39,7 @@ class AI extends Player {
     }
 
     // if corner available, take corner
-    let boardMax = board.boardSize - 1
+    let boardMax = board.props.boardSize - 1
     let corners = emptyTiles.filter(function(tile) {
       return tile[0] == 0 && tile[1] == 0 ||
              tile[0] == 0 && tile[1] == boardMax ||
@@ -97,7 +97,7 @@ class AI extends Player {
 
     clone.addTile(x, y)
 
-    return clone.isWinner(board.boardSize)
+    return clone.isWinner(board.props.boardSize)
   }
 
   getEmptyTiles(board, players) {
