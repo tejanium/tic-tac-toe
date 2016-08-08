@@ -85,6 +85,12 @@ class Player {
       }
     }
   }
+
+  reset() {
+    this.tiles = []
+    this.xs    = {}
+    this.ys    = {}
+  }
 }
 
 module.exports = Player;

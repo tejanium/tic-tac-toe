@@ -2,9 +2,6 @@ const React = require('react');
 
 const RowComponent = require('./row')
 
-const Player = require('../models/player')
-const AI     = require('../models/ai')
-
 class BoardComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +10,7 @@ class BoardComponent extends React.Component {
 
     this.state = this.newState()
     this.state.move = 1
+    this.state.players = this.props.players
 
     for(var x = 0; x < this.props.boardSize; x++) {
       this.tiles[x] = []
@@ -25,7 +23,6 @@ class BoardComponent extends React.Component {
 
   newState() {
     return {
-      players: [new Player('X'), new AI('O')],
       key: Date.now(),
       move: 0
     }
@@ -60,6 +57,10 @@ class BoardComponent extends React.Component {
   }
 
   resetGame() {
+    this.state.players.forEach((player) => {
+      player.reset()
+    })
+
     this.setState(this.newState())
   }
 

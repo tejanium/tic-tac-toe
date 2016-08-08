@@ -51,11 +51,15 @@
 
 	var BoardComponent = __webpack_require__(159);
 
+	var Player = __webpack_require__(162);
+	var AI = __webpack_require__(163);
+
 	var DefaultBoardSize = 3;
 
 	var boardSize = parseInt(window.location.search.replace('?', '')) || DefaultBoardSize;
+	var players = [new Player('X'), new AI('O')];
 
-	ReactDOM.render(React.createElement(BoardComponent, { boardSize: boardSize }), document.getElementById('container'));
+	ReactDOM.render(React.createElement(BoardComponent, { boardSize: boardSize, players: players }), document.getElementById('container'));
 
 /***/ },
 /* 1 */
@@ -19721,9 +19725,6 @@
 
 	var RowComponent = __webpack_require__(160);
 
-	var Player = __webpack_require__(162);
-	var AI = __webpack_require__(163);
-
 	var BoardComponent = function (_React$Component) {
 	  _inherits(BoardComponent, _React$Component);
 
@@ -19736,6 +19737,7 @@
 
 	    _this.state = _this.newState();
 	    _this.state.move = 1;
+	    _this.state.players = _this.props.players;
 
 	    for (var x = 0; x < _this.props.boardSize; x++) {
 	      _this.tiles[x] = [];
@@ -19751,7 +19753,6 @@
 	    key: 'newState',
 	    value: function newState() {
 	      return {
-	        players: [new Player('X'), new AI('O')],
 	        key: Date.now(),
 	        move: 0
 	      };
@@ -19790,6 +19791,10 @@
 	  }, {
 	    key: 'resetGame',
 	    value: function resetGame() {
+	      this.state.players.forEach(function (player) {
+	        player.reset();
+	      });
+
 	      this.setState(this.newState());
 	    }
 	  }, {
@@ -20109,6 +20114,13 @@
 	          return true;
 	        }
 	      }
+	    }
+	  }, {
+	    key: "reset",
+	    value: function reset() {
+	      this.tiles = [];
+	      this.xs = {};
+	      this.ys = {};
 	    }
 	  }]);
 
