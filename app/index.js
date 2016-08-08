@@ -5,7 +5,6 @@ const BoardComponent = require('./components/board.js')
 
 const DefaultBoardSize = 3
 
-
 let boardSize = parseInt(window.location.search.replace('?', '')) || DefaultBoardSize
 
 ReactDOM.render(
