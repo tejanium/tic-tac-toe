@@ -74,7 +74,7 @@ describe('player basic winning', () => {
     // player.addTile(1, 1)
     // player.addTile(2, 2)
 
-    for(var boardSize=3; boardSize < 10; boardSize++) {
+    for(var boardSize = 3; boardSize < 10; boardSize = boardSize + 2) {
       let player = new Player('X')
 
       for(var row_col=0; row_col < boardSize; row_col++) {
@@ -100,7 +100,7 @@ describe('player basic winning', () => {
     // player.addTile(1, 1)
     // player.addTile(2, 0)
 
-    for(var boardSize=3; boardSize < 10; boardSize++) {
+    for(var boardSize = 3; boardSize < 10; boardSize = boardSize + 2) {
       let player = new Player('X')
 
       for(var i=0; i < boardSize; i++) {
